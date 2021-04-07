@@ -1,0 +1,238 @@
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.block {
+    margin: auto;
+  display: block;
+  width: 70%;
+  border: none;
+  background-color: #4CAF50;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+    color: white;
+    max-width: 700px;
+    border-radius: 5px;
+}
+
+.flip-card {
+    margin: auto;
+  background-color: transparent;
+  width: 50%;
+  height: 50%;
+  min-height: 250px;
+min-width: 300px;
+    max-width: 600px;
+    max-height: 300px;
+  perspective: 1000px;
+    border-radius: 5px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+    border-radius: 5px;
+}
+
+.flip-card-front {
+  background-color: #bbb;
+  color: black;
+  text-align: center;
+    display: flex;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+    border-radius: 5px;
+}
+
+.flip-card-back {
+  background-color: #2980b9;
+  color: white;
+  transform: rotateY(180deg);
+    display: flex;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+    border-radius: 5px;
+}
+
+table, th, td {
+  border: 1px solid teal;
+    border-radius: 2px;
+}
+
+</style>
+
+    <title>
+        FlashCard - {{ vocabulary_collection.name }}
+    </title>
+
+
+</head>
+<body>
+
+<h1 style="text-align:center;">Vocabulary Flashcard - {{ vocabulary_collection.name }}</h1>
+
+<ul>
+    {% for word in card %}
+        <h3 style="text-align:center;">Hover over the box below:</h3>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h1>{{ word.word }}</h1>
+            </div>
+            <div class="flip-card-back">
+{#              <p>{{ word.definition }}</p>#}
+
+                <div style="width: 100%;
+                            height: 100%;
+                            max-height: 350px;
+                            overflow:auto;
+                            background-color:#2980b9;
+                            color:white;
+                            scrollbar-base-color:gold;
+                            font-family:sans-serif;
+                            padding:10px;
+                            text-align:center;">
+                    <p style="text-align:center;">{{ word.definition }}</p> </div>
+
+            </div>
+          </div>
+        </div>
+
+        <p style="text-align:center;">Do you recognize this word?</p>
+
+        {% if card.has_next %}
+
+                <form method="post" action="/flashcard/{{ word.vocabulary_collection.uuid }}/{{ card.next_page_number }}">
+                    <input type="hidden" name="word" value="{{word.word}}" />
+                    <input type="hidden" name="word_uuid" value="{{word.uuid}}" />
+                    <input type="hidden" name="correctness" value=1 />
+                    {% csrf_token %}
+                    <button type="submit" class="block">Yah!</button>
+                </form>
+
+                <form method="post" action="/flashcard/{{ word.vocabulary_collection.uuid }}/{{ card.next_page_number }}">
+                    <input type="hidden" name="word" value="{{word.word}}" />
+                    <input type="hidden" name="word_uuid" value="{{word.uuid}}" />
+                    <input type="hidden" name="correctness" value=0 />
+                    {% csrf_token %}
+                    <button type="submit" class="block">Nah!</button>
+                </form>
+
+            <div style="text-align:center;">
+                <table style="text-align:center; margin: auto">
+                  <tr>
+                    <th>Word</th>
+                    <th>Correct Count</th>
+                      <th>Last Correct</th>
+                      <th>Incorrect Count</th>
+                      <th>Last Incorrect</th>
+                  </tr>
+                  <tr>
+                    <td>{{ word.word }}</td>
+                    <td>{{ word.memories.correct_count }}</td>
+                      <td>{{ word.memories.last_correct }}</td>
+                      <td>{{ word.memories.incorrect_count }}</td>
+                      <td>{{ word.memories.last_incorrect }}</td>
+                  </tr>
+                </table>
+            </div>
+
+            </br>
+
+            <div style="text-align:center;">
+                <label for="file" >Progress: {{ card.number }}/{{ card.paginator.count }} words</label>
+                </br>
+                <progress id="file" value={{ card.number }} max={{ card.paginator.count }}> </progress>
+            </div>
+
+        {% else %}
+
+                <h4 style="text-align:center;">
+                    Finish this one and you are done!
+                </h4>
+
+                <form method="post" action="{{ vocabulary_collection.get_absolute_url }}">
+                    <input type="hidden" name="word" value="{{word.word}}" />
+                    <input type="hidden" name="word_uuid" value="{{word.uuid}}" />
+                    <input type="hidden" name="correctness" value=1 />
+                    {% csrf_token %}
+                    <button type="submit" class="block">Yah!</button>
+                </form>
+                <form method="post" action="{{ vocabulary_collection.get_absolute_url }}">
+                    <input type="hidden" name="word" value="{{word.word}}" />
+                    <input type="hidden" name="word_uuid" value="{{word.uuid}}" />
+                    <input type="hidden" name="correctness" value=0 />
+                    {% csrf_token %}
+                    <button type="submit" class="block">Nah!</button>
+                </form>
+
+            <div style="text-align:center;">
+                <table style="text-align:center; margin: auto">
+                  <tr>
+                    <th>Word</th>
+                    <th>Correct Count</th>
+                      <th>Last Correct</th>
+                      <th>Incorrect Count</th>
+                      <th>Last Incorrect</th>
+                  </tr>
+                  <tr>
+                    <td>{{ word.word }}</td>
+                    <td>{{ word.memories.correct_count }}</td>
+                      <td>{{ word.memories.last_correct }}</td>
+                      <td>{{ word.memories.incorrect_count }}</td>
+                      <td>{{ word.memories.last_incorrect }}</td>
+                  </tr>
+                </table>
+            </div>
+
+            </br>
+
+
+            <div style="text-align:center;">
+            <label for="file">Finished! {{ card.number }}/{{ card.paginator.count }} words</label>
+                </br>
+                <progress id="file" value={{ card.number }} max={{ card.paginator.count }}> </progress>
+            </div>
+
+            {% endif %}
+
+
+    {% empty %}
+        <li><em>There are currently no vocabulary in this vocabulary collection</em></li>
+    {% endfor %}
+
+    <a href="/vocab_list/{{ vocabulary_collection.uuid }}">
+        <button type="button" class="block" style="background-color: maroon; color: white">End Session (Progress will be saved)</button>
+    </a>
+
+
+</ul>
+
+</body>
+</html>
+

@@ -1,0 +1,25 @@
+{% extends 'wordbook/base.html' %}
+{% block title %}
+Create New Vocabulary List
+{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+	<h3>Create a New Vocabulary List</h3>
+	<br>
+	<form
+        action="{% url 'wordbook_vocabulary_list_create_urlpattern' %}"
+        method="post"
+        class="form-group" style="max-width: 500px;">
+
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Create</button>
+	</form>
+
+    <a href="http://{{ request.get_host }}/vocab_list"
+           class="btn btn-light"
+           role="button"
+           aria-pressed="true">Cancel</a>
+
+{% endblock %}

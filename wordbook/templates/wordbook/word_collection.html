@@ -1,0 +1,42 @@
+{% extends 'wordbook/base.html' %}
+
+{% block head %}
+    <style>
+    .vc_list-text {
+        font-size: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        float: none;
+    }
+    </style>
+{% endblock %}
+
+{% block title %}
+      Word2Mem - Vocabulary Collections
+  {% endblock %}
+
+
+{% block content %}
+    <div class="vc_list-text">
+        <h2>Vocabulary Collections</h2>
+
+        <p>- To upload and import your own word list (in *.csv format), enter one of your existing Vocabulary Collection.</p>
+
+        <ul class="list-group" style="max-width: 600px;">
+            <li class="list-group-item list-group-item-action d-flex active">
+                    <a href="{% url 'wordbook_vocabulary_list_create_urlpattern' %}"
+                       style="color: white;"><i class="fas fa-plus-circle"></i> Create New Collection</a>
+                </li>
+            {% for collection in collection_list %}
+                <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <a href="{{ collection.get_absolute_url }}"
+                       ><i class="fas fa-paperclip"></i> {{ collection.name }}</a>
+                    <span class="badge badge-primary badge-pill">{{ collection.words.count }} | {{ collection.category }}</span>
+                </li>
+            {% empty %}
+                <li><em>There are currently no vocabulary collection available</em></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

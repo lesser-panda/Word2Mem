@@ -1,0 +1,28 @@
+{% extends 'wordbook/base.html' %}
+
+{% block title %}
+Word2Mem - Word Definition
+{% endblock %}
+
+{% block content %}
+    <h2>Word: {{ word }} ({{ word.language }})</h2>
+
+    <section>
+        <table>
+            <tr>
+                <th>Definition:</th>
+                <td>{{ word.definition }}</td>
+            </tr>
+        </table>
+    </section>
+
+    <section>
+        <table>
+            <tr>
+                <th>Last correct memorization:</th>
+                <td>{{ memory.last_correct }}</td>
+            </tr>
+        </table>
+    </section>
+
+{% endblock %}

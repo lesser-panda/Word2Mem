@@ -1,0 +1,6 @@
+django-crispy-forms
+numpy
+pandas~=1.2.3
+Django==3.1.7
+nltk~=3.5
+pydictionary~=2.0.1

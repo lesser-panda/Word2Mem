@@ -1,0 +1,38 @@
+{% extends "wordbook/base.html" %}
+
+{% block title %}
+Login Here
+{% endblock %}
+
+{% block head %}
+<style>
+.homepage-text {
+    font-size: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    float: none;
+}
+</style>
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="homepage-text">
+
+        <h3 style="text-align:center;">
+          Welcome back!
+        </br>
+    </h3>
+
+     <form method="post" class="from-group" style="max-width: 500px;">
+	{% csrf_token %}
+	{{form|crispy}}
+	<p>Don't have an account? Create one <a href="/register">here</a></p>
+	<button type="submit" class="btn btn-success">Login</button>
+    </form>
+
+    </div>
+
+{% endblock %}

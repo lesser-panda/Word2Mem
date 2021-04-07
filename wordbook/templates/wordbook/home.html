@@ -1,0 +1,83 @@
+{% extends 'wordbook/base.html' %}
+{% load static %}
+
+{% block head %}
+<style>
+.homepage-text {
+    font-size: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    float: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<h3 style="text-align:center;">
+  Word2Mem
+  <small class="text-muted">- Your Personal Vocabulary Builder</small>
+</h3>
+
+    </br>
+
+    <div class="text-center">
+    <img src={% static "dictionary.jpg" %} class="img-fluid" alt="Responsive image" style="width: 90%; max-width: 500px;">
+    </div>
+
+    </br>
+
+    <div class="homepage-text">
+        <p>
+            Hello there! Welcome to Word2Mem. My name is Zhongyuan Zhang. This website is a school project that I made for one of my web development course
+            at the University of Illinois at Urbana-Champaign.
+        </p>
+
+        {% if not user.is_authenticated %}
+
+            <div style="text-align:center;">
+            <h3>Create your account to begin!</h3>
+
+            <a href="{% url "register" %}"
+           class="btn btn-primary btn-lg active"
+           role="button"
+           aria-pressed="true";"><i class="fas fa-user-circle"></i> Create Account</a>
+
+                <a href="{% url "login" %}"
+           class="btn btn-primary btn-lg active"
+           role="button"
+           aria-pressed="true";"><i class="fas fa-sign-in-alt"></i> Login</a>
+
+            <br></br>
+            </div>
+        {% endif %}
+
+        <p>
+            English is not my native language. I understand how hard it can be for anyone to learn new languages. This is why I created the Word2Mem. Word2Mem is a personal vocabulary builder, designed for anyone who is interested in improving their vocabulary.
+        </p>
+        <p>
+            With Word2Mem, you can:
+        </p>
+
+        <li>
+            Create your personal account to start your learning journey
+        </li>
+        <li>
+            Create multiple vocabulary collections
+        </li>
+        <li>
+            Import your own vocabularies in CSV or Excel format
+        </li>
+        <li>Learn new vocabularies and review old ones with interactive Flashcard learning sessions</li>
+        <li>Review your past performance</li>
+        <li>More features coming soon!</li>
+
+        </br>
+
+        <p>
+            Any questions, comments, suggestions? Feel free to contact me at <i class="fas fa-envelope"></i><a href = "mailto: me.zzy@me.com"> me.zzy@me.com</a>
+        </p>
+
+
+    </div>
+
+{% endblock %}

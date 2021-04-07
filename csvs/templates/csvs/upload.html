@@ -1,0 +1,64 @@
+{% extends 'wordbook/base.html' %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block head %}
+<style>
+.upload-text {
+    {#font-size: 100%;#}
+    {#max-width: 700px;#}
+    {#float: none;#}
+    font-size: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    float: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="jumbotron upload-text">
+
+        <h3>Import vocabularies from a .CSV file</h3>
+
+        <form action="" method="POST" class="form-group" enctype="multipart/form-data">
+        <br/>
+        <h5>Upload your .csv file here:</h5>
+        {% csrf_token %}
+        {{ form }}
+        <br/>
+        <button type="submit" class="btn btn-success">Upload</button>
+
+        <a href="http://{{ request.get_host }}/vocab_list/{{ uuid }}"
+           class="btn btn-primary btn-sm active"
+           role="button"
+           aria-pressed="true">Back</a>
+
+        </form>
+
+
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    </div>
+
+    <div class="upload-text">
+        <p>Your .csv file should have two columns. One column should have the header named "Word". The other column should have the header named "Definition". </p>
+        <p>You can edit the template with your favorite editor (Microsoft Excel, Apple Numbers, Google Sheets, Openoffice Calc, etc.), and <u>Save As</u> .csv format (or <u>"Export"</u> on Mac). A sample csv file is shown below:</p>
+
+        <a href={% static "csv_template.csv" %} download> Download .csv template </a>
+        </br>
+        <img src={% static "csv_sample.png" %} class="img-fluid" alt="Responsive image" style="width: 90%; max-width: 500px;">
+    </div>
+
+
+
+
+{% endblock content %}

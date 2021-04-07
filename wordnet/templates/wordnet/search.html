@@ -1,0 +1,76 @@
+{% extends 'wordbook/base.html' %}
+
+{% block head %}
+    <style>
+    .dictionary-text {
+        font-size: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        float: none;
+    }
+    </style>
+{% endblock %}
+
+{% block title %}
+      Word2Mem - English Dictionary
+  {% endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+    <div class="jumbotron">
+        <h3>
+            English Dictionary
+        </h3>
+        <form method="post">
+            {% csrf_token %}
+            <form>
+                <div class="form-group">
+                    <label>Search Word: </label>
+                    {{ search_form.search_term }}
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+                <small class="form-text text-muted">Source: Princeton University "About WordNet."
+                    <a href="https://wordnet.princeton.edu">WordNet</a>. Princeton University. 2010. </small>
+            </form>
+        </form>
+    </div>
+    </div>
+
+    <div class="dictionary-text">
+        {% if response %}
+
+            <p>{{ response }}</p>
+
+
+            {% if exist %}
+                {% if not in_db %}
+                <form method="post" action="{% url "search_home_urlpattern" %}">
+
+                    <input type="hidden" name="word" value="{{ word }}" />
+                    <input type="hidden" name="definition" value="{{ response }}" />
+                    {% csrf_token %}
+                    <button type="submit" name="add_word" class="btn btn-primary btn-lg active">
+                        <i class="fas fa-plus-circle"></i>
+                        Add to Vocabulary Collection</button>
+                </form>
+                {% else %}
+                    <button type="submit" class="btn btn-primary btn-lg disabled">
+                    <i class="fas fa-check"></i>
+                    Already Added!</button>
+                {% endif %}
+            {% endif %}
+
+            {% if just_added %}
+                <button type="submit" class="btn btn-primary btn-lg disabled">
+                    <i class="fas fa-check"></i>
+                    Just Added!</button>
+            {% endif %}
+
+            <code>Note: Adding to a default Vocabulary List named "From Dictionary Search"</code>
+
+        {% endif %}
+    </div>
+
+{% endblock %}
