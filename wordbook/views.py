@@ -116,7 +116,9 @@ class VocabularyCollectionDetail(View):
 
         memory.save()
 
-        cache.delete('word_list')
+        cache_label = 'word_list' + str(request.user.id)
+
+        cache.delete(cache_label)
 
         return self.get(request, kwargs["uuid"])
 
@@ -163,12 +165,14 @@ class FlashCard(View):
             uuid=uuid
         )
 
+        cache_label = 'word_list' + str(request.user.id)
+
         if r_card_num == 1:
-            cache.delete('word_list')
-        word_list = cache.get('word_list')
+            cache.delete(cache_label)
+        word_list = cache.get(cache_label)
         if not word_list:
             word_list = vocabulary_collection.words.all().order_by("?")
-            cache.set('word_list', word_list)
+            cache.set(cache_label, word_list)
 
         p = Paginator(word_list, 1)
 
