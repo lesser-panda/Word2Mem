@@ -1,6 +1,10 @@
 # Word2Mem
 Word2Mem - A multi-user Vocabulary Builder Web App based on Django
 
+Demo site: [https://www.word2mem.com](https://www.word2mem.com/)
+  - Try it out! No email/personal information needed for registration.
+  - Any comments/suggestions are welcome.
+
 ## Main Features:
 - User Authentication
 - Create multiple "Vocabulary Collections" to store words you want to learn and memorize
