@@ -142,20 +142,6 @@ def word_remove(request, uuid):
     return HttpResponseRedirect(currernt_link)
 
 
-class WordDefinition(View):
-
-    def get(self, request, uuid):
-        word = get_object_or_404(
-            Word,
-            uuid=uuid
-        )
-        memory = word.memories
-        return render(request,
-                      'wordbook/word_definition.html',
-                      {'word': word,
-                       'memory': memory})
-
-
 class FlashCard(View):
 
     def get(self, request, uuid, r_card_num):

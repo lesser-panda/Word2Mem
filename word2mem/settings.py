@@ -123,13 +123,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'Word2Mem/static')
 
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'Word2Mem/media')
 
 
 LOGIN_REDIRECT_URL = "/"
