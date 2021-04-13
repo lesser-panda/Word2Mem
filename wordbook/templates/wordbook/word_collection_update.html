@@ -1,0 +1,16 @@
+{% extends 'wordbook/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Edit Vocabulary Collection
+{% endblock %}
+
+{% block content %}
+    <form
+        action="{{ vocabularycollection.get_update_url }}"
+        method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+{% endblock %}

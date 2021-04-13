@@ -7,7 +7,7 @@ from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.cache import cache
 from django.views.decorators.vary import vary_on_cookie
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, UpdateView
 
 from wordbook.forms import VocabularyCollectionForm
 from wordbook.models import VocabularyCollection, Word, Memory
@@ -114,6 +114,10 @@ class VocabularyCollectionDetail(View):
             memory.correct_count += 1
             memory.last_correct = datetime.now()
 
+        vc = word.vocabulary_collection
+        vc.last_accessed = datetime.now()
+        vc.save()
+
         memory.save()
 
         cache_label = 'word_list' + str(request.user.id)
@@ -127,6 +131,15 @@ class VocabularyCollectionListCreate(ObjectCreateMixin, View):
 
     form_class = VocabularyCollectionForm
     template_name = 'wordbook/word_collection_create.html'
+
+
+class VocabularyCollectionUpdate(UpdateView):
+    form_class = VocabularyCollectionForm
+    model = VocabularyCollection
+    template_name = 'wordbook/word_collection_update.html'
+
+    def get_object(self, queryset=None):
+        return VocabularyCollection.objects.get(uuid=self.kwargs.get("uuid"))
 
 
 def vocabularycollection_remove(request, uuid):

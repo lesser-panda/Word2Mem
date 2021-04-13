@@ -5,7 +5,9 @@
   {% endblock %}
 
 {% block content %}
-    <h2>Vocabulary Collection: {{ vocabulary_collection  }}</h2>
+    <h2><a href="{{ vocabulary_collection.get_update_url }}">
+        <i class="fas fa-pencil-alt"></i>
+        Vocabulary Collection: {{ vocabulary_collection  }}</a></h2>
     <section>
         <table>
             <tr>
@@ -59,19 +61,6 @@
     </section>
 
     </br>
-
-{#    <section>#}
-{#        <h3>Words</h3>#}
-{#        <ul class="list-group" style="max-width: 400px;">#}
-{#            {% for word in word_list %}#}
-{#                <li class="list-group-item">#}
-{#                    {{ word.word }}#}
-{#                </li>#}
-{#            {% empty %}#}
-{#                <li class="list-group-item"><em>There are currently no words in this collection. To start, try import a CSV file!</em></li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
-{#    </section>#}
 
     <section>
 

@@ -24,6 +24,10 @@ class VocabularyCollection(models.Model):
         return reverse('wordbook_vocabulary_list_detail_urlpattern',
                        kwargs={'uuid': self.uuid})
 
+    def get_update_url(self):
+        return reverse('wordbook_vocabulary_update_urlpattern',
+                       kwargs={'uuid': self.uuid})
+
     class Meta:
         ordering = ['add_date', 'name']
         constraints = [
