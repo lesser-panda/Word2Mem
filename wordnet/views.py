@@ -17,7 +17,7 @@ def search(request):
     # and add the searched word into that Vocabulary Collection
     def add_to_db(spelling, definition):
         vc, table_exist = request.user.vc_list.get_or_create(name="From Dictionary Search", category="English")
-        word_record, word_exist = vc.words.get_or_create(word=spelling, definition=definition)
+        word_record, word_exist = vc.words.get_or_create(word=spelling, definition=definition, user_id=request.user.id)
 
     # check if word is already in
     # user's "From Dictionary Search" Vocabulary Collection

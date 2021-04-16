@@ -1,6 +1,6 @@
 from django import forms
 
-from wordbook.models import Word, VocabularyCollection, Memory
+from wordbook.models import VocabularyCollection
 
 
 class VocabularyCollectionForm(forms.ModelForm):

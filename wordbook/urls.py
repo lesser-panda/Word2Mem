@@ -2,7 +2,6 @@
 from django.urls import path, include
 
 from csvs.views import upload_file_view
-from . import views
 from .views import VocabularyCollectionList, Homepage, VocabularyCollectionListCreate, \
     VocabularyCollectionDetail, FlashCard, vocabularycollection_remove, word_remove, VocabularyCollectionUpdate
 

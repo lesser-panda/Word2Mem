@@ -32,7 +32,7 @@ def upload_file_view(request, **kwargs):
                 word=record['word'],
                 definition=record['definition'],
             ) for record in df_records]
-            request.user.word.bulk_create(model_instances)
+            request.user.words.bulk_create(model_instances)
             os.remove(obj.file_name.path)
             request.user.csv.all().delete()
             messages.success(request, 'vocabularies imported successfully!')

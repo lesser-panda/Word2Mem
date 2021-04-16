@@ -1,18 +1,15 @@
 from datetime import datetime
 
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.cache import cache
-from django.views.decorators.vary import vary_on_cookie
-from django.views.generic import DeleteView, UpdateView
+from django.views.generic import UpdateView
 
 from wordbook.forms import VocabularyCollectionForm
-from wordbook.models import VocabularyCollection, Word, Memory
+from wordbook.models import VocabularyCollection, Word, History
 from wordbook.utils import ObjectCreateMixin
-
 
 
 class Homepage(View):
@@ -99,26 +96,21 @@ class VocabularyCollectionDetail(View):
         print(request.POST.get('word_uuid'))
 
         word = Word.objects.get(uuid=request.POST.get('word_uuid'))
-        try:
-            memory = word.memories
-        except:
-            print("memory not exist! creating new memory")
-            memory = Memory(word=word)
 
-        print("correctness:")
-        print(request.POST.get('correctness'))
         if int(request.POST.get('correctness')) == 0:
-            memory.incorrect_count += 1
-            memory.last_incorrect = datetime.now()
-        elif int(request.POST.get('correctness')) == 1:
-            memory.correct_count += 1
-            memory.last_correct = datetime.now()
+            correctness = False
+        else:
+            correctness = True
+
+        new_record = History(word=word,
+                             datetime=datetime.now(),
+                             user_id=request.user.id,
+                             correctness=correctness)
+        new_record.save()
 
         vc = word.vocabulary_collection
         vc.last_accessed = datetime.now()
         vc.save()
-
-        memory.save()
 
         cache_label = 'word_list' + str(request.user.id)
 
@@ -196,25 +188,23 @@ class FlashCard(View):
         print(request.POST.get('word_uuid'))
 
         word = Word.objects.get(uuid=request.POST.get('word_uuid'))
-        try:
-            memory = word.memories
-        except:
-            print("memory not exist! creating new memory")
-            memory = Memory(word=word)
+
+        if int(request.POST.get('correctness')) == 0:
+            correctness = False
+        else:
+            correctness = True
+
+        new_record = History(word=word,
+                             datetime=datetime.now(),
+                             user_id=request.user.id,
+                             correctness=correctness)
+        new_record.save()
 
         print("correctness:")
         print(request.POST.get('correctness'))
-        if int(request.POST.get('correctness')) == 0:
-            memory.incorrect_count += 1
-            memory.last_incorrect = datetime.now()
-        elif int(request.POST.get('correctness')) == 1:
-            memory.correct_count += 1
-            memory.last_correct = datetime.now()
 
         vc = word.vocabulary_collection
         vc.last_accessed = datetime.now()
         vc.save()
-
-        memory.save()
 
         return self.get(request, kwargs["uuid"], kwargs["r_card_num"])
