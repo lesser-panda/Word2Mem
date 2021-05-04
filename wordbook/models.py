@@ -6,6 +6,8 @@ from django.db.models import UniqueConstraint
 from django.urls import reverse
 import uuid
 
+from csvs.validator import validate_file_size
+
 
 class VocabularyCollection(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vc_list", null=True, editable=False)

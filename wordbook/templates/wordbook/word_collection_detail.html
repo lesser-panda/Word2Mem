@@ -1,13 +1,27 @@
 {% extends 'wordbook/base.html' %}
 
+{% block head %}
+    <style>
+    .vc-text {
+        font-size: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        float: none;
+    }
+    </style>
+{% endblock %}
+
 {% block title %}
-      Word2Mem - {{ vocabulary_collection }}
+      Word2Mem - {{ vocabulary_collection.name }}
   {% endblock %}
 
 {% block content %}
+
+<div class="vc-text">
+
     <h2><a href="{{ vocabulary_collection.get_update_url }}">
         <i class="fas fa-pencil-alt"></i>
-        Vocabulary Collection: {{ vocabulary_collection.name  }}</a></h2>
+         {{ vocabulary_collection.name  }}</a></h2>
     <section>
         <table>
             <tr>
@@ -123,5 +137,7 @@
     {% endif %}
 </ul>
 </nav>
+
+</div>
 
 {% endblock %}

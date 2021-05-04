@@ -4,7 +4,19 @@ Create New Vocabulary List
 {% endblock %}
 {% load crispy_forms_tags %}
 
+{% block head %}
+    <style>
+    .vc-text {
+        font-size: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        float: none;
+    }
+    </style>
+{% endblock %}
+
 {% block content %}
+<div class="vc-text">
 	<h3>Create a New Vocabulary List</h3>
 	<br>
 	<form
@@ -21,5 +33,5 @@ Create New Vocabulary List
            class="btn btn-light"
            role="button"
            aria-pressed="true">Cancel</a>
-
+</div>
 {% endblock %}

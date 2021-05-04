@@ -1,11 +1,23 @@
 {% extends 'wordbook/base.html' %}
 {% load crispy_forms_tags %}
 
+{% block head %}
+    <style>
+    .vc-text {
+        font-size: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        float: none;
+    }
+    </style>
+{% endblock %}
+
 {% block title %}
     Edit Vocabulary Collection
 {% endblock %}
 
 {% block content %}
+<div class="vc-text">
     <form
         action="{{ vocabularycollection.get_update_url }}"
         method="post">
@@ -13,4 +25,5 @@
         {{ form|crispy }}
         <button type="submit" class="btn btn-success">Save</button>
     </form>
+</div>
 {% endblock %}

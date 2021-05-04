@@ -1,5 +1,9 @@
-from datetime import datetime
+from collections import OrderedDict
+from datetime import datetime, date
+from operator import itemgetter
 
+from django.db.models import Count
+from django.db.models.functions import ExtractWeekDay, TruncDate
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import View
@@ -10,6 +14,7 @@ from django.views.generic import UpdateView
 from wordbook.forms import VocabularyCollectionForm
 from wordbook.models import VocabularyCollection, Word, History
 from wordbook.utils import ObjectCreateMixin
+from .fusioncharts import FusionCharts
 
 
 class Homepage(View):
@@ -24,7 +29,7 @@ class VocabularyCollectionList(View):
         request.user.vc_list.get_or_create(name="From Dictionary Search", category="English")
         return render(request,
                       'wordbook/word_collection.html',
-                      {'collection_list': request.user.vc_list.all(),})
+                      {'collection_list': request.user.vc_list.all(), })
 
 
 class VocabularyCollectionDetail(View):
@@ -68,7 +73,7 @@ class VocabularyCollectionDetail(View):
 
             page_list = []
             for i in range(0, paginator.num_pages):
-                page_list.append(i+1)
+                page_list.append(i + 1)
 
             return render(
                 request,
@@ -120,7 +125,6 @@ class VocabularyCollectionDetail(View):
 
 
 class VocabularyCollectionListCreate(ObjectCreateMixin, View):
-
     form_class = VocabularyCollectionForm
     template_name = 'wordbook/word_collection_create.html'
 
@@ -208,3 +212,70 @@ class FlashCard(View):
         vc.save()
 
         return self.get(request, kwargs["uuid"], kwargs["r_card_num"])
+
+
+class StatisticsView(View):
+
+    def get(self, request):
+        context = {}
+        context['vc_count'] = VocabularyCollection.objects.filter(user_id=request.user.id).count()
+        context['word_count'] = Word.objects.filter(user_id=request.user.id).count()
+        context['online_days'] = History.objects.dates('datetime', 'day').count()
+
+        pieData = OrderedDict()
+        pieData["data"] = []
+        pieData["data"].append({"label": '✓',
+                                "value": History.objects.filter(user_id=request.user.id, correctness=True).count()})
+        pieData["data"].append({"label": 'X',
+                                "value": History.objects.filter(user_id=request.user.id, correctness=False).count()})
+        pieChartConfig = OrderedDict()
+        pieChartConfig["caption"] = "Historical Performance"
+        pieChartConfig["showLegend"] = 0
+        pieChartConfig["theme"] = "fusion"
+        pieData["chart"] = pieChartConfig
+
+        pieChart = FusionCharts("pie2d", "correctnessPieChart", "100%", "100%", "correctnessPie-container", "json",
+                                pieData)
+        context["piechart_output"] = pieChart.render()
+
+        current_week = date.today().isocalendar()[1]
+        weekdayData = History.objects \
+            .filter(user_id=request.user.id, datetime__week=current_week) \
+            .annotate(label=ExtractWeekDay("datetime"), order=ExtractWeekDay("datetime"))\
+            .order_by() \
+            .values('label', 'order').annotate(value=Count("uuid"))
+
+        weekdayData = list(weekdayData)
+
+        weekdayStr = {1: "Sunday",
+                      2: "Monday",
+                      3: "Tuesday",
+                      4: "Wednesday",
+                      5: "Thursday",
+                      6: "Friday",
+                      7: "Saturday"}
+        missingDays = [1, 2, 3, 4, 5, 6, 7]
+        for d in weekdayData:
+            missingDays.remove(d['label'])
+            d['label'] = weekdayStr[d["label"]]
+        for d in missingDays:
+            weekdayData.append({'label': weekdayStr[d], 'value': 0, 'order': d})
+
+        print(weekdayData)
+
+        weekdayData = sorted(weekdayData, key=itemgetter('order'))
+
+        weekdayBarData = OrderedDict()
+        weekdayBarData["data"] = weekdayData
+        weekdayBarConfig = OrderedDict()
+        weekdayBarConfig["caption"] = "Number of words studied this week"
+        weekdayBarConfig["theme"] = "fusion"
+        weekdayBarConfig["showLabel"] = 1
+        weekdayBarData["chart"] = weekdayBarConfig
+        weekdayBarChart = FusionCharts("column2d", "weekdayBarChart", "100%", "100%", "weekdayBar-container", "json",
+                                       weekdayBarData)
+        context["weekdaybar_output"] = weekdayBarChart.render()
+
+        return render(request,
+                      'wordbook/statistics.html',
+                      context)

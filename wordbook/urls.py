@@ -3,7 +3,8 @@ from django.urls import path, include
 
 from csvs.views import upload_file_view
 from .views import VocabularyCollectionList, Homepage, VocabularyCollectionListCreate, \
-    VocabularyCollectionDetail, FlashCard, vocabularycollection_remove, word_remove, VocabularyCollectionUpdate
+    VocabularyCollectionDetail, FlashCard, vocabularycollection_remove, word_remove, VocabularyCollectionUpdate, \
+    StatisticsView
 
 urlpatterns = [
     path('', Homepage.as_view(), name='wordbook_homepage_urlpattern'),
@@ -15,4 +16,5 @@ urlpatterns = [
     # path('upload_csv/<uuid:uuid>', upload_file_view, name='upload_csv_urlpattern'),
     path('vocab_list/<uuid:uuid>/delete/', vocabularycollection_remove, name='wordbook_vocabulary_list_delete_urlpattern'),
     path('word/<uuid:uuid>/delete/', word_remove, name='wordbook_word_delete_urlpattern'),
+    path('statistics/', StatisticsView.as_view(), name='wordbook_statistics_urlpattern'),
 ]

@@ -1,0 +1,65 @@
+{% extends 'wordbook/base.html' %}
+
+{% block title %}
+    Word2Mem - Statistics
+{% endblock %}
+
+{% block head %}
+
+<style>
+	#gridcontainer { padding: 5px; }
+	.grid-row > div {
+		border: 5px solid white;
+		padding: 5px;
+		background-color: aliceblue;
+		margin: 0px 0;
+	}
+</style>
+
+
+    {% load static %}
+    <script type="text/javascript" src="{% static "wordbook/fusioncharts/fusioncharts.js" %}"></script>
+    <script type="text/javascript" src="{% static "wordbook/fusioncharts/fusioncharts.charts.js" %}"></script>
+    <script type="text/javascript" src="{% static "wordbook/fusioncharts/themes/fusioncharts.theme.fusion.js" %}"></script>
+
+
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<div class="panel">
+	<h3 class="panel-header">Statistics</h3>
+	<div id="gridcontainer">
+		<div class="row grid-row">
+			<div class="col-sm-4">
+                <h4>Overview:</h4>
+                </br>
+                <h5>Vocabulary Collections: {{ vc_count }}</h5>
+                </br>
+                <h5>Words: {{ word_count }}</h5>
+                </br>
+                <h5>Online Days: {{ online_days }}</h5>
+            </div>
+			<div class="col-sm-4" style="min-width: 300px; min-height: 300px">
+                <div id="correctnessPie-container">{{ piechart_output|safe }}</div>
+
+            </div>
+			<div class="col-sm-4" style="min-width: 300px; min-height: 300px">
+                <div id="weekdayBar-container">{{ weekdaybar_output|safe }}</div>
+            </div>
+{#		</div>#}
+{#		<div class="row grid-row">#}
+{#			<div class="col-sm-6"></div>#}
+{#			<div class="col-sm-6"></div>#}
+{#		</div>#}
+{#		<div class="row grid-row">#}
+{#			<div class="col-sm-12"></div>#}
+{#		</div>#}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
