@@ -34,5 +34,5 @@ $RECYCLE.BIN/
 # PyCharm
 .idea
 
-# media/csvs
-media/csvs
+# media
+/media/
