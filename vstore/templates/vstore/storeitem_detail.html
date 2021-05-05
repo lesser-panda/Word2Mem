@@ -1,0 +1,65 @@
+{% extends 'wordbook/base.html' %}
+
+{% block head %}
+    <style>
+    .vc_list-text {
+        font-size: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        float: none;
+    }
+    </style>
+{% endblock %}
+
+{% block title %}
+      Word2Mem - Collection Detail
+{% endblock %}
+
+{% block content %}
+
+    <div class="vc_list-text">
+        <h2>Store Item: {{ store_item.name }}</h2>
+
+        <section>
+            <table>
+                <tr>
+                    <th>Category:</th>
+                    <td>{{ store_item.category }}</td>
+                </tr>
+                <tr>
+                    <th>Description:</th>
+                    <td>{{ store_item.description }}</td>
+                </tr>
+
+            </table>
+        </section>
+
+        <form method="post" action="">
+            <input type="hidden" name="id" value="{{ store_item.id }}" />
+            {% csrf_token %}
+            {% if just_added %}
+                <button type="submit" name="add_item" class="btn btn-primary btn-lg disabled">
+                <i class="fas fa-plus-circle"></i>
+                Added!
+            </button>
+            {% else %}
+                <button type="submit" name="add_item" class="btn btn-primary btn-lg active">
+                <i class="fas fa-plus-circle"></i>
+                Add to Your Account
+            </button>
+            {% endif %}
+
+        </form>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+                {% endfor %}
+                <a href={% url "wordbook_vocabulary_list_urlpattern" %}>Go to your Vocabulary Collection page</a>
+            </ul>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

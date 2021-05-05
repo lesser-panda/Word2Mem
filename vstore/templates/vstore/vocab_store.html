@@ -1,0 +1,41 @@
+{% extends 'wordbook/base.html' %}
+
+{% block title %}
+    Word2Mem - Store
+{% endblock %}
+
+{% block head %}
+    <style>
+    .vc_list-text {
+        font-size: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        float: none;
+    }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="vc_list-text">
+
+        <h2>Vocabulary Store</h2>
+
+        <p>- Here are some pre-made vocabulary collections for your convenience. All free!</p>
+
+        <ul class="list-group" style="max-width: 600px;">
+            {% for collection in storeitem_list %}
+                <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <a href="{{ collection.get_absolute_url }}"
+                       ><i class="fas fa-paperclip"></i> {{ collection.name }}</a>
+                    <span class="badge badge-primary badge-pill">{{ collection.category }}</span>
+                </li>
+            {% empty %}
+                <li><em>There are currently no vocabulary collection available</em></li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+
+{% endblock %}
