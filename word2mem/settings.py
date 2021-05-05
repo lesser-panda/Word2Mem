@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'register.apps.RegisterConfig',
     'csvs',
     'crispy_forms',
-    'wordnet'
+    'wordnet',
+    'vstore',
 ]
 
 MIDDLEWARE = [

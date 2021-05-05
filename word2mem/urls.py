@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include("django.contrib.auth.urls")),
     path('', include('csvs.urls')),
     path('', include('wordnet.urls')),
+    path('', include("vstore.urls")),
     path('change_password/', v.change_password, name="change_password")
 ]
 
