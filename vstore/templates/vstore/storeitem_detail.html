@@ -28,10 +28,9 @@
                 </tr>
                 <tr>
                     <th>Description:</th>
-                    <td>{{ store_item.description }}</td>
                 </tr>
-
             </table>
+            <p>{{ store_item.description|linebreaks }}</p>
         </section>
 
         <form method="post" action="">
