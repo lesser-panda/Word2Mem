@@ -220,7 +220,7 @@ class StatisticsView(View):
         context = {}
         context['vc_count'] = VocabularyCollection.objects.filter(user_id=request.user.id).count()
         context['word_count'] = Word.objects.filter(user_id=request.user.id).count()
-        context['online_days'] = History.objects.dates('datetime', 'day').count()
+        context['online_days'] = History.objects.filter(user_id=request.user.id).dates('datetime', 'day').count()
 
         pieData = OrderedDict()
         pieData["data"] = []
